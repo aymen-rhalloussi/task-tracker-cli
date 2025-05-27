@@ -1,14 +1,15 @@
 package com.prjcts.app.core.model;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Task {
 
-    private Long id;
+    private final Long id;
     private String description;
     private Status status;
-    private Date createdAt;
+    private final Date createdAt;
     private Date modifiedAt;
 
     public Task(String description) {
@@ -24,18 +25,31 @@ public class Task {
         updateModificationDate();
     }
 
-    public void setStatus(String status) {
-        if (status == "in-progress") {
+    public void setStatus(String status) throws Exception {
+        if (Objects.equals(status, "in-progress")) {
             this.status = Status.IN_PROGRESS;
             updateModificationDate();
         }
-        else if (status == "done") {
+        else if (Objects.equals(status, "done")) {
             this.status = Status.DONE;
             updateModificationDate();
         }
         else {
-
+            throw new Exception("INVALID STATUS!");
         }
+    }
+
+    public void updateModificationDate() {
+        this.modifiedAt = new Date();
+    }
+
+    @Override
+    public String toString() {
+        return "ID => " + getId() +
+                "\nDescription => " + getDescription() +
+                "\nStatus => " + getStatus() +
+                "\nCreated at => " + getCreatedAt() +
+                "\nModified at => " + getModifiedAt();
     }
 
     public Long getId() {
@@ -56,18 +70,5 @@ public class Task {
 
     public Date getModifiedAt() {
         return modifiedAt;
-    }
-
-    public void updateModificationDate() {
-        this.modifiedAt = new Date();
-    }
-
-    @Override
-    public String toString() {
-        return "ID => " + getId() +
-                "\nDescription => " + getDescription() +
-                "\nStatus => " + getStatus() +
-                "\nCreated at => " + getCreatedAt() +
-                "\nModified at => " + getModifiedAt();
     }
 }
